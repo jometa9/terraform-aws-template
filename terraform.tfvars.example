@@ -1,0 +1,86 @@
+# General AWS Configuration
+aws_region       = "us-east-1"         # US East (N. Virginia) for cost efficiency
+environment_name = "DEV_QA_PROD"
+certificate_arn = "" 
+app_name         = "NAME_YOUR_APP"          # Application name for resources
+
+# Component Toggle Flags
+enable_vpc                 = false
+enable_ecs                 = false
+enable_rds                 = false
+enable_s3_storage          = false
+enable_frontend            = false
+frontend_enable_cloudfront = false
+enable_cloudfront          = false
+enable_ecr                 = false
+
+# VPC Configuration
+vpc_cidr             = "10.100.0.0/16"
+public_subnet_1_cidr = "10.100.0.0/24"
+public_subnet_2_cidr = "10.100.1.0/24"
+
+
+# Database Configuration
+db_name           = "YOUR_DB_NAME"
+db_username       = "YOUR_DB_USERNAME"
+db_password       = "YOUR_DB_PASSWORD"  # Change this to a secure password
+db_engine_version = "8.0.40"             # MySQL Community version
+db_instance_class = "db.t4g.micro"       # 2 vCPU, 1GB RAM
+db_port           = 3306                 # Default
+publicly_accessible = true               # Make the database publicly accessible
+storage_type      = "gp3"                # General Purpose SSD (gp3)
+allocated_storage = 20                   # 20GB storage
+max_allocated_storage = 1000             # Up to 1000GB with autoscaling
+storage_encrypted = true                 # Enable encryption
+performance_insights_enabled = false     # Disable Performance Insights
+monitoring_interval = 0                  # Disable Enhanced Monitoring
+
+# Storage Configuration (S3 bucket for application data)
+storage_bucket_name = "NAME_YOUR_STORAGE_BUCKET"  # Must be globally unique
+
+# Backend API Configuration
+backend_service_name        = "NAME_YOUR_DOCKER_SERVICE"
+backend_image_url           = "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/NAME_YOUR_DOCKER_SERVICE:latest"  # Using ECR image
+backend_container_port      = 8080             # Standard HTTP port
+backend_task_cpu            = 256            # 0.25 vCPU - minimal viable CPU
+backend_container_cpu       = 256            # 0.25 vCPU - minimal viable CPU 
+backend_task_memory         = 512            # 0.5 GB - minimal viable memory
+backend_container_memory    = 512            # 0.5 GB - minimal viable memory
+backend_desired_count       = 1              # Start with one container
+backend_path_pattern        = "/*"           # Route all traffic to this service
+backend_healthcheck_path    = "/health"      # Health check path
+backend_min_containers      = 1              # Minimum container count
+backend_max_containers      = 3              # Maximum container count for cost control
+backend_autoscaling_target_value = 70        # Scale at 70% CPU utilization
+backend_node_env            = "production"   # Environment variable if needed
+backend_timezone            = "UTC"          # Timezone
+
+#Env variables ecs
+
+environment_variables = {
+  "S3_BUCKET" = "-"
+  "AWS_REGION" = "-"
+  "STORAGE_PROVIDER" = "-"
+  "PORT" = "-"
+  "S3_REGION" = "-"
+  "DB_PORT" = "-"
+  "DB_USER" = "-"
+  "AWS_SECRET_ACCESS_KEY" = "-"
+  "DB_NAME" = "-"
+  "DB_HOST" = "-"
+  "S3_URL" = "-"
+  "APIKEY" = "-"
+  "JWT_SECRET" = "-"
+  "AWS_ACCESS_KEY_ID" = "-"
+  "APISECRET" = "-"
+  "DB_PASSWORD" = "-"
+}
+
+
+# Frontend Configuration (S3 hosting with optional CloudFront)
+frontend_bucket_name       = "NAME_YOUR_FRONTEND_BUCKET"  # Must be globally unique
+frontend_domain_name       = ""  # Optional: your custom domain name
+# ECR Repository Configuration
+ecr_repository_name       = "NAME_YOUR_ECR_REPOSITORY"  # Name of the repository
+ecr_image_tag_mutability  = "MUTABLE"      # Allow image tags to be overwritten
+ecr_encryption_type       = "AES256"       # Use AES256 encryption for the repository
